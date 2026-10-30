@@ -13,6 +13,8 @@ Built with React 19, Vite, Tailwind CSS v4, and lucide-react.
 
 ## Getting started
 
+Use **Node.js 24.x** (`nvm use` reads `.nvmrc`).
+
 ```bash
 npm ci
 npm run dev      # start the dev server
@@ -32,6 +34,22 @@ Because the app uses `BrowserRouter`, **every path must serve `index.html`** on 
 host. On Netlify add a `public/_redirects` file with `/* /index.html 200`; on Vercel
 add a `vercel.json` rewrite; most static hosts support one of these out of the box.
 (During local dev, Vite handles this automatically.)
+
+## Nixpacks deployment
+
+The root `nixpacks.toml` selects Node 24 from a pinned nixpkgs revision and runs
+`npm ci --include=dev --include=optional`, followed by `npm run build`.
+Nixpacks' detected Caddy server serves `dist/` with SPA routing.
+
+Node 22.11 is too old for Vite 8 and its Rolldown native binding. The `.npmrc`
+engine check rejects an incompatible runtime during installation.
+
+Keep the deployment build pack set to **Nixpacks**, with the repository root as
+the base directory. Clear any custom Node/install/build overrides in the hosting
+dashboard so the tracked configuration is used, then redeploy the latest `main`.
+The GitHub Actions build checks a clean Linux install on both the pinned build
+runtime (24.10.0) and the current Node 24 release, plus a complete Nixpacks Docker
+image build.
 
 ## Contact form (Formspree)
 

@@ -1,0 +1,39 @@
+name: Build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  linux-build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: ["24.10.0", "24"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+      - run: npm ci --include=dev --include=optional
+      - run: npm run lint
+      - run: npm run build
+
+  nixpacks-build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Nixpacks
+        run: |
+          curl --fail --location --retry 3 \
+            https://github.com/railwayapp/nixpacks/releases/download/v1.41.0/nixpacks-v1.41.0-x86_64-unknown-linux-musl.tar.gz \
+            --output "$RUNNER_TEMP/nixpacks.tar.gz"
+          tar --extract --gzip --file "$RUNNER_TEMP/nixpacks.tar.gz" --directory "$RUNNER_TEMP"
+      - name: Build deployment image
+        run: '"$RUNNER_TEMP/nixpacks" build . --name portfolio-ci'
