@@ -1,0 +1,173 @@
+@import "tailwindcss";
+
+@theme {
+  --color-neo-yellow: #fde047;
+  --color-neo-pink: #fb7185;
+  --color-neo-cyan: #38bdf8;
+  --color-neo-lime: #4ade80;
+  --color-neo-purple: #c084fc;
+  --color-neo-orange: #fb923c;
+  --color-neo-indigo: #818cf8;
+  --color-neo-bg: #faf7f2;
+  --color-neo-surface: #ffffff;
+  --color-neo-dark: #121316;
+
+  --font-sans: "Outfit", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+@layer base {
+  * {
+    border-color: #121316;
+  }
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply text-[#121316] min-h-screen selection:bg-neo-yellow selection:text-black;
+    font-family: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+    background-color: var(--color-neo-bg);
+    background-image: radial-gradient(#d1d5db 1.2px, transparent 1.2px);
+    background-size: 20px 20px;
+    overflow-x: hidden;
+  }
+}
+
+@layer utilities {
+  .neo-box {
+    border: 2.5px solid #121316;
+    box-shadow: 4px 4px 0px 0px #121316;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  
+  .neo-box-hover:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0px 0px #121316;
+  }
+
+  .neo-box-sm {
+    border: 2px solid #121316;
+    box-shadow: 3px 3px 0px 0px #121316;
+    transition: all 0.15s ease-in-out;
+  }
+
+  .neo-box-sm:hover {
+    transform: translate(-1.5px, -1.5px);
+    box-shadow: 4.5px 4.5px 0px 0px #121316;
+  }
+
+  .neo-btn {
+    border: 2.5px solid #121316;
+    box-shadow: 4px 4px 0px 0px #121316;
+    font-weight: 700;
+    transition: all 0.15s ease-in-out;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .neo-btn:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0px 0px #121316;
+  }
+
+  .neo-btn:active {
+    transform: translate(2px, 2px);
+    box-shadow: 1px 1px 0px 0px #121316;
+  }
+
+  .neo-badge {
+    border: 2px solid #121316;
+    box-shadow: 2px 2px 0px 0px #121316;
+    font-weight: 700;
+  }
+
+  /* App-like Touch and Safe Area Utilities */
+  .pb-safe {
+    padding-bottom: env(safe-area-inset-bottom, 16px);
+  }
+
+  .pt-safe {
+    padding-top: env(safe-area-inset-top, 0px);
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .touch-pan-x {
+    touch-action: pan-x;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* Marquee Animation */
+.marquee-container {
+  overflow: hidden;
+  white-space: nowrap;
+  width: 100%;
+}
+
+.marquee-content {
+  display: inline-flex;
+  animation: marquee 24s linear infinite;
+}
+
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+@keyframes pulse-subtle {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.85; transform: scale(1.03); }
+}
+
+.animate-pulse-subtle {
+  animation: pulse-subtle 3s ease-in-out infinite;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-slideUp {
+  animation: slideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Scroll Reveal (driven by IntersectionObserver in App.jsx) */
+.neo-reveal {
+  opacity: 0;
+  transform: translateY(26px);
+  transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1), transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.neo-reveal.neo-reveal-visible {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .neo-reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .marquee-content,
+  .animate-pulse-subtle {
+    animation: none;
+  }
+}
